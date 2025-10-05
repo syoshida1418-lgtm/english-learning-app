@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { AddWordForm } from "@/components/manage/add-word-form"
 import { WordList } from "@/components/manage/word-list"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,17 @@ export default function ManagePage() {
   const [words, setWords] = useState<CustomWord[]>([])
   const { toast } = useToast()
 
+  const loadWords = useCallback(() => {
+    const manager = CustomVocabularyManager.getInstance()
+    setWords(manager.getCustomWords())
+  }, [])
+
+  const updateWordCount = useCallback(() => {
+    const manager = CustomVocabularyManager.getInstance()
+    setWordCount(manager.getCustomWords().length)
+    loadWords()
+  }, [loadWords])
+
   useEffect(() => {
     setMounted(true)
     const manager = CustomVocabularyManager.getInstance()
@@ -24,18 +35,7 @@ export default function ManagePage() {
       updateWordCount()
       loadWords()
     })
-  }, [])
-
-  const loadWords = () => {
-    const manager = CustomVocabularyManager.getInstance()
-    setWords(manager.getCustomWords())
-  }
-
-  const updateWordCount = () => {
-    const manager = CustomVocabularyManager.getInstance()
-    setWordCount(manager.getCustomWords().length)
-    loadWords()
-  }
+  }, [updateWordCount, loadWords])
 
   const handleExport = () => {
     const manager = CustomVocabularyManager.getInstance()

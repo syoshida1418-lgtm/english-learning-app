@@ -17,7 +17,7 @@ export function AddWordForm({ onWordAdded }: AddWordFormProps) {
   const [recorderSupported, setRecorderSupported] = useState(true)
   const [audioDataUrl, setAudioDataUrl] = useState<string | undefined>(undefined)
   const [audioBlob, setAudioBlob] = useState<Blob | undefined>(undefined)
-  const mediaChunksRef = useState<any[]>([])[0]
+  const mediaChunksRef = useState<Blob[]>([])[0]
   let mediaRecorder: MediaRecorder | null = null
 
   // Initialize support
@@ -32,8 +32,9 @@ export function AddWordForm({ onWordAdded }: AddWordFormProps) {
       mediaRecorder = new MediaRecorder(stream)
       mediaChunksRef.length = 0
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) mediaChunksRef.push(e.data)
+      mediaRecorder.ondataavailable = (e: BlobEvent) => {
+        const d = e.data
+        if (d && (d as Blob).size > 0) mediaChunksRef.push(d as Blob)
       }
 
       mediaRecorder.onstop = async () => {
@@ -45,7 +46,10 @@ export function AddWordForm({ onWordAdded }: AddWordFormProps) {
         try {
           const url = URL.createObjectURL(blob)
           setAudioDataUrl(url)
-        } catch (e) {
+        } catch (
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          _
+        ) {
           const reader = new FileReader()
           reader.onloadend = () => {
             setAudioDataUrl(reader.result as string)
@@ -59,8 +63,11 @@ export function AddWordForm({ onWordAdded }: AddWordFormProps) {
 
       mediaRecorder.start()
       setIsRecording(true)
-    } catch (error) {
-      console.error("Recording start failed:", error)
+    } catch (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _
+    ) {
+      console.error("Recording start failed:")
       setRecorderSupported(false)
     }
   }
@@ -70,8 +77,11 @@ export function AddWordForm({ onWordAdded }: AddWordFormProps) {
       if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop()
       }
-    } catch (error) {
-      console.error("Error stopping recorder:", error)
+    } catch (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _
+    ) {
+      console.error("Error stopping recorder:")
     }
     setIsRecording(false)
   }

@@ -32,17 +32,18 @@ export function DataSettings() {
     setBackupHistory(dataManager.getBackupHistory())
   }
 
-  const handleSettingChange = (key: keyof AppSettings, value: any) => {
+  const handleSettingChange = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => {
     if (!settings) return
 
     const dataManager = DataManager.getInstance()
-    const newSettings = { ...settings, [key]: value }
+    const newSettings: AppSettings = { ...settings, [key]: value }
     setSettings(newSettings)
-    dataManager.updateSettings({ [key]: value })
+    // updateSettings accepts a partial of AppSettings
+    dataManager.updateSettings({ [key]: value } as Partial<AppSettings>)
 
     toast({
       title: "Settings Updated",
-      description: `${key} has been updated successfully.`,
+      description: `${String(key)} has been updated successfully.`,
     })
   }
 
@@ -66,10 +67,13 @@ export function DataSettings() {
         title: "Export Successful",
         description: "Your complete app data has been exported.",
       })
-    } catch (error) {
+    } catch (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _err
+    ) {
       toast({
         title: "Export Failed",
-        description: error instanceof Error ? error.message : "Unknown error occurred",
+        description: "Unknown error occurred",
         variant: "destructive",
       })
     }
@@ -105,7 +109,10 @@ export function DataSettings() {
               variant: "destructive",
             })
           }
-        } catch (error) {
+        } catch (
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          _err
+        ) {
           toast({
             title: "Import Error",
             description: "Failed to read the file. Please check the format.",
@@ -199,30 +206,23 @@ export function DataSettings() {
               <Label htmlFor="auto-save">Enable Auto-Save</Label>
               <p className="text-sm text-muted-foreground">Automatically save your progress every 30 seconds</p>
             </div>
-            <Switch
-              id="auto-save"
-              checked={settings.autoSave}
-              onCheckedChange={(checked) => handleSettingChange("autoSave", checked)}
-            />
-          </div>
-
-          <Separator />
-
-          <div className="space-y-2">
-            <Label htmlFor="backup-frequency">Backup Frequency</Label>
-            <Select
-              value={settings.backupFrequency}
-              onValueChange={(value) => handleSettingChange("backupFrequency", value)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="daily">Daily</SelectItem>
-                <SelectItem value="weekly">Weekly</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex items-center gap-4">
+              <Switch
+                id="auto-save"
+                checked={settings.autoSave}
+                onCheckedChange={(v) => handleSettingChange("autoSave", Boolean(v))}
+              />
+              <Select value={settings.backupFrequency} onValueChange={(v) => handleSettingChange("backupFrequency", v as AppSettings["backupFrequency"]) }>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Backup Frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                  <SelectItem value="monthly">Monthly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -252,9 +252,7 @@ export function DataSettings() {
           {storageUsage.percentage > 80 && (
             <div className="flex items-center gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <AlertTriangle className="w-4 h-4 text-yellow-600" />
-              <p className="text-sm text-yellow-800">
-                Storage is getting full. Consider exporting and clearing old data.
-              </p>
+              <p className="text-sm text-yellow-800">Storage is getting full. Consider exporting and clearing old data.</p>
             </div>
           )}
         </CardContent>

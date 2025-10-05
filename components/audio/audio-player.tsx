@@ -44,11 +44,17 @@ export function AudioPlayer({
     return () => {
       try {
         speechSynthesis.cancel()
-      } catch (e) {}
+      } catch (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _
+      ) {}
       if (audioRef.current) {
         try {
-          audioRef.current.pause()
-        } catch (e) {}
+            audioRef.current.pause()
+          } catch (
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            _
+          ) {}
       }
     }
   }, [])
@@ -134,12 +140,18 @@ export function AudioPlayer({
   const stopAudio = () => {
     try {
       speechSynthesis.cancel()
-    } catch (e) {}
+    } catch (
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _
+    ) {}
     if (audioRef.current) {
       try {
         audioRef.current.pause()
         audioRef.current.currentTime = 0
-      } catch (e) {}
+      } catch (
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _
+      ) {}
     }
     setIsPlaying(false)
   }

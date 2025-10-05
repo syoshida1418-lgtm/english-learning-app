@@ -20,6 +20,8 @@ export interface UserProgress {
   }
 }
 
+import type { VocabularyWord } from './vocabulary-data'
+
 export interface QuizResult {
   wordId: string
   isCorrect: boolean
@@ -89,7 +91,7 @@ export class ProgressManager {
     return { ...this.progress }
   }
 
-  recordQuizResult(result: QuizResult, word: any): void {
+  recordQuizResult(result: QuizResult, word: VocabularyWord): void {
     this.progress.totalWordsStudied++
 
     if (result.isCorrect) {

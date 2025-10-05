@@ -65,7 +65,7 @@ export function QuizResults({ results, words, totalTime }: QuizResultsProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {results.map((result, index) => {
+            {results.map((result) => {
               const word = getWordById(result.wordId)
               if (!word) return null
 

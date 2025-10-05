@@ -5,18 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import {
-  BookOpen,
-  Target,
-  TrendingUp,
-  Calendar,
-  Play,
-  Plus,
-  List,
-  Volume2,
-  AlertTriangle,
-  Settings,
-} from "lucide-react"
+import { BookOpen, Target, TrendingUp, Calendar, Play, Plus, List, AlertTriangle, Settings } from "lucide-react"
+import { type UserProgress } from "@/lib/user-progress"
 import { ProgressManager } from "@/lib/user-progress"
 import { InstallPrompt } from "@/components/pwa/install-prompt"
 import Link from "next/link"
@@ -24,7 +14,7 @@ import { WordCountDisplay } from "@/components/WordCountDisplay"
 
 
 export default function HomePage() {
-  const [progress, setProgress] = useState<any>(null)
+  const [progress, setProgress] = useState<UserProgress | null>(null)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {

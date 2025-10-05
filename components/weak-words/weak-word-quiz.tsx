@@ -91,7 +91,7 @@ export function WeakWordQuiz({ onComplete }: WeakWordQuizProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground mb-4">Great job! You don't have any weak words to practice right now.</p>
+          <p className="text-muted-foreground mb-4">Great job! You do not have any weak words to practice right now.</p>
           <Link href="/quiz">
             <Button className="w-full">Take Regular Quiz</Button>
           </Link>

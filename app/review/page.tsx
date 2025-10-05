@@ -149,7 +149,7 @@ export default function ReviewPage() {
                   <CardContent className="text-center py-8">
                     <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
                     <h3 className="text-lg font-semibold mb-2">Great job!</h3>
-                    <p className="text-muted-foreground">You don't have any weak words right now.</p>
+                    <p className="text-muted-foreground">You do not have any weak words right now.</p>
                     <Link href="/quiz">
                       <Button className="mt-4">Take a Quiz</Button>
                     </Link>
@@ -182,7 +182,7 @@ export default function ReviewPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Congratulations! These are the words you've mastered through consistent practice.
+                    Congratulations! These are the words you have mastered through consistent practice.
                   </p>
                 </CardContent>
               </Card>
